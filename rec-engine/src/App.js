@@ -1,23 +1,29 @@
-import logo from './logo.svg';
 import './App.css';
+import LoginButton from './components/login';
+import LogoutButton from './components/logout';
+import { useEffect } from 'react';
+import { gapi } from 'gapi-script';
+
+const client_id = "808665823142-af24qudscmqice38qgpda2mde8qplo20.apps.googleusercontent.com";
+const scope = "https://www.googleapis.com/auth/drive";
 
 function App() {
+
+  useEffect(() => {
+    function start() {
+      gapi.client.init({
+        client_id: client_id,
+        scope: scope
+      })
+    }
+    gapi.load('client:auth2', start);
+  })
+
+
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <LoginButton />
+      <LogoutButton />
     </div>
   );
 }
