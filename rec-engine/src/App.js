@@ -3,6 +3,7 @@ import LoginButton from './components/login';
 import LogoutButton from './components/logout';
 import { useEffect } from 'react';
 import { gapi } from 'gapi-script';
+import Interactive from './components/interactive';
 
 const client_id = "808665823142-af24qudscmqice38qgpda2mde8qplo20.apps.googleusercontent.com";
 const scope = "https://www.googleapis.com/auth/drive";
@@ -22,8 +23,9 @@ function App() {
 
   return (
     <div className="App">
-      <LoginButton />
-      <LogoutButton />
+      {/* <LoginButton />
+      <LogoutButton /> */}
+      <Interactive />
     </div>
   );
 }
