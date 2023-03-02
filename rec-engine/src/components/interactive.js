@@ -1,7 +1,14 @@
-import Spline from '@splinetool/react-spline';
-
-export default function Interactive() {
+import Spline from "@splinetool/react-spline";
+const Interactive = () => {
   return (
-    <Spline style={{ height: "1000px", width: "100%" }} scene="https://prod.spline.design/49Id9tLwIHZ-xsa3/scene.splinecode" />
+    <div
+      style={{
+        width: "100%",
+        height: "800px",
+      }}
+    >
+      <Spline scene="https://prod.spline.design/49Id9tLwIHZ-xsa3/scene.splinecode" />
+    </div>
   );
-}
+};
+export default Interactive;
