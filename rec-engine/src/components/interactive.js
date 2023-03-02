@@ -1,5 +1,6 @@
 import Spline from "@splinetool/react-spline";
-const Interactive = () => {
+
+export default function Interactive() {
   return (
     <div
       style={{
@@ -11,4 +12,3 @@ const Interactive = () => {
     </div>
   );
 };
-export default Interactive;

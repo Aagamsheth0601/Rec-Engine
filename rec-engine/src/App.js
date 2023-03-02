@@ -29,9 +29,9 @@ function App() {
       <LogoutButton /> */}
       <Navbar />
       <Routes>
-        <Interactive path="/" component={Interactive} />
-        <Route path="/about" component={About} />
-        <Route path="/pastRecs" component={PastRecs} />
+        <Route path="/" exact element={<Interactive />} />
+        <Route path="/about" element={<About />} />
+        <Route path="/pastRecs" element={<PastRecs />} />
       </Routes>
     </Router>
   );
