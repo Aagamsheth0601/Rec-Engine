@@ -1,16 +1,19 @@
 import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
 import axios from 'axios';
+import React, { useState, useEffect } from 'react';
 
 export default function ModalTemplate(props) {
 
-  axios.get('http://127.0.0.1:8000/song/get_artist_by_genre')
-    .then(res => {
-      console.log(res);
-    })
-    .catch(err => {
-      console.log(err);
-    })
+
+  useEffect(() => {
+    axios.get('http://127.0.0.1:8000/song/get_artist_by_genre')
+      .then(res => {
+        console.log(res);
+      }).catch(err => {
+        console.log(err);
+      });
+  }, []);
 
   return (
     <Modal

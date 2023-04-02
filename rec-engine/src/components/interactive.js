@@ -1,14 +1,21 @@
 import Spline from "@splinetool/react-spline";
 import ModalTemplate from "./modalTemplate";
-import { useState } from 'react';
+import ModalRestaurant from "./Restaurant/modalRestaurant";
+import React, { useState } from 'react';
+
 
 
 export default function Interactive() {
-  const [modalShow, setModalShow] = useState(false)
+  const [modalShow, setModalShow] = useState(false);
+  const [modalRestaurant, setModalRestaurant] = useState(false);
 
   function onMouseDown(e) {
     console.log(e.target.name);
-    setModalShow(true);
+    if (e.target.name === 'CheckPointRestaurants') {
+      setModalRestaurant(true);
+    } else {
+      setModalShow(true);
+    }
   }
   return (
     <>
@@ -17,6 +24,15 @@ export default function Interactive() {
         show={modalShow}
         onHide={() => setModalShow(false)}
       />
+
+      <ModalRestaurant
+        show={modalRestaurant}
+        onHide={() => setModalRestaurant(false)}
+        setModalRestaurant={setModalRestaurant}
+        longitude={72.828059}
+        latitude={18.942880}
+      />
+
       <div
         style={{
           width: "100%",
