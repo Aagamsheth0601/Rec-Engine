@@ -8,18 +8,20 @@ export default function ModalRestaurantBasedOnCusine(props) {
     const [rest, setRest] = useState({});
 
     useEffect(() => {
-        axios.get('http://127.0.0.1:8000/restaurant/similar?rest_id=' + props.restId + '&longitude=' + props.longitude + '&latitude=' + props.latitude)
-            .then(res => {
-                setData(res.data);
-            }).catch(err => {
-                console.log(err);
-            });
-        axios.get('http://127.0.0.1:8000/restaurant/get_rest?rest_id=' + props.restId)
-            .then(res => {
-                setRest(res.data);
-            }).catch(err => {
-                console.log(err);
-            });
+        if (props.restId !== 0) {
+            axios.get('http://127.0.0.1:8000/restaurant/similar?rest_id=' + props.restId + '&longitude=' + props.longitude + '&latitude=' + props.latitude)
+                .then(res => {
+                    setData(res.data);
+                }).catch(err => {
+                    console.log(err);
+                });
+            axios.get('http://127.0.0.1:8000/restaurant/get_rest?rest_id=' + props.restId)
+                .then(res => {
+                    setRest(res.data);
+                }).catch(err => {
+                    console.log(err);
+                });
+        }
     }, [props.restId, props.latitude, props.longitude]);
 
     const renderData = () => {
@@ -32,7 +34,6 @@ export default function ModalRestaurantBasedOnCusine(props) {
                 </Button>
             );
         }
-        console.log('http://127.0.0.1:8000/restaurant/similar?rest_id=' + props.restId + '&longitude=' + props.longitude + '&latitude=' + props.latitude);
         return rows;
     };
 

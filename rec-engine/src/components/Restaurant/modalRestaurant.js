@@ -3,8 +3,6 @@ import Modal from "react-bootstrap/Modal";
 import axios from "axios";
 import React, { useState, useEffect } from "react";
 import ModalRestaurantBasedOnCusine from "./modalRestaurantBasedOnCusine";
-import Box from "@mui/material/Box";
-import TextField from "@mui/material/TextField";
 
 // import Cusine from './cusine'
 
@@ -18,16 +16,9 @@ export default function ModalRestaurant(props) {
 
   const handleChange = (e) => {
     const searchText = e.target.value;
-    console.log(searchText);
     setSearch(searchText);
     if (searchText !== "") {
-      const xyz = data.filter((item) => {
-        if (item.includes(searchText)) {
-          console.log(item);
-          return item;
-        }
-      });
-      console.log(xyz);
+      const xyz = data.filter((item) => { return item.toLowerCase().includes(searchText); });
       setFilteredInfo(xyz);
     } else {
       setFilteredInfo(data);
@@ -38,18 +29,18 @@ export default function ModalRestaurant(props) {
     axios
       .get(
         "http://127.0.0.1:8000/restaurant/all_cusine?longitude=" +
-          props.longitude +
-          "&latitude=" +
-          props.latitude
+        props.longitude +
+        "&latitude=" +
+        props.latitude
       )
       .then((response) => {
         setData(response.data.sort());
+        setFilteredInfo(response.data.sort());
       })
       .catch((err) => {
         console.log(err);
       });
-    setFilteredInfo(data);
-  }, [props.latitude, props.longitude]);
+  }, [props.latitude, props.longitude, props.modalrestaurant]);
 
   return (
     <>
@@ -57,7 +48,7 @@ export default function ModalRestaurant(props) {
         show={modalRestaurantBasedOnCusine}
         onHide={() => {
           setCusineSelected(null);
-          props.setModalRestaurant(true);
+          props.setmodalrestaurant(true);
           setModalRestaurantBasedOnCusine(false);
         }}
         cusine={cusineSelected}
@@ -79,27 +70,20 @@ export default function ModalRestaurant(props) {
         </Modal.Header>
         <Modal.Body>
           <div>
-            <TextField
-              value={search}
-              placeholder="Search"
-              onChange={(e) => {
-                handleChange(e);
-              }}
-            />
+            <input type="text" value={search} onChange={handleChange} />
 
-            {filteredInfo.map((item) => (
-              <>
-                <Button
-                  variant="light"
-                  onClick={() => {
-                    props.setModalRestaurant(false);
-                    setCusineSelected(item);
-                    setModalRestaurantBasedOnCusine(true);
-                  }}
-                >
-                  {item}
-                </Button>
-              </>
+            {filteredInfo.map((item, index) => (
+              <Button
+                variant="light"
+                key={index}
+                onClick={() => {
+                  props.setmodalrestaurant(false);
+                  setCusineSelected(item);
+                  setModalRestaurantBasedOnCusine(true);
+                }}
+              >
+                {item}
+              </Button>
             ))}
           </div>
         </Modal.Body>

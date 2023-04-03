@@ -10,12 +10,14 @@ export default function ModalRestaurantBasedOnCusine(props) {
     const [modalRestaurantDetail, setModalRestaurantDetail] = useState(false);
 
     useEffect(() => {
-        axios.get('http://127.0.0.1:8000/restaurant/get_cusine?cusine=' + props.cusine + '&longitude=' + props.longitude + '&latitude=' + props.latitude)
-            .then(res => {
-                setData(res.data);
-            }).catch(err => {
-                console.log(err);
-            });
+        if (props.cusine !== null) {
+            axios.get('http://127.0.0.1:8000/restaurant/get_cusine?cusine=' + props.cusine + '&longitude=' + props.longitude + '&latitude=' + props.latitude)
+                .then(res => {
+                    setData(res.data);
+                }).catch(err => {
+                    console.log(err);
+                });
+        }
     }, [props.cusine, props.latitude, props.longitude]);
 
     const renderData = () => {
@@ -28,7 +30,6 @@ export default function ModalRestaurantBasedOnCusine(props) {
                 </Button>
             );
         }
-        console.log('http://127.0.0.1:8000/restaurant/get_cusine?cusine=' + props.cusine + '&longitude=' + props.longitude + '&latitude=' + props.latitude);
         return rows;
     };
 
