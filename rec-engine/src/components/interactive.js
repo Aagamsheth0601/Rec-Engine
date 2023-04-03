@@ -1,11 +1,25 @@
 import Spline from "@splinetool/react-spline";
 import ModalTemplate from "./modalTemplate";
 import ModalRestaurant from "./Restaurant/modalRestaurant";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 
 export default function Interactive() {
   const [modalShow, setModalShow] = useState(false);
   const [modalRestaurant, setModalRestaurant] = useState(false);
+  const [location, setLocation] = useState({ latitude: null, longitude: null });
+
+  useEffect(() => {
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition((position) => {
+        setLocation({
+          latitude: position.coords.latitude,
+          longitude: position.coords.longitude,
+        });
+      });
+    } else {
+      console.log("Geolocation is not supported by this browser.");
+    }
+  }, []);
 
   function onMouseDown(e) {
     console.log(e.target.name);
@@ -24,8 +38,8 @@ export default function Interactive() {
         show={modalRestaurant}
         onHide={() => setModalRestaurant(false)}
         setModalRestaurant={setModalRestaurant}
-        longitude={72.828059}
-        latitude={18.94288}
+        longitude={location["longitude"]}
+        latitude={location["latitude"]}
       />
 
       <div
