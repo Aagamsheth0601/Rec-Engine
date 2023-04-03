@@ -44,8 +44,8 @@ export default function Interactive() {
         show={modalRestaurant}
         onHide={() => setModalRestaurant(false)}
         setModalRestaurant={setModalRestaurant}
-        longitude={location.longitude}
-        latitude={location.latitude}
+        longitude={location['longitude']}
+        latitude={location['latitude']}
       />
 
       <div
