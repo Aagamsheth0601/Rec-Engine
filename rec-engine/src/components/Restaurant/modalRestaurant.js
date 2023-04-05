@@ -18,7 +18,9 @@ export default function ModalRestaurant(props) {
     const searchText = e.target.value;
     setSearch(searchText);
     if (searchText !== "") {
-      const xyz = data.filter((item) => { return item.toLowerCase().includes(searchText); });
+      const xyz = data.filter((item) => {
+        return item.toLowerCase().includes(searchText);
+      });
       setFilteredInfo(xyz);
     } else {
       setFilteredInfo(data);
@@ -29,9 +31,9 @@ export default function ModalRestaurant(props) {
     axios
       .get(
         "http://127.0.0.1:8000/restaurant/all_cusine?longitude=" +
-        props.longitude +
-        "&latitude=" +
-        props.latitude
+          props.longitude +
+          "&latitude=" +
+          props.latitude
       )
       .then((response) => {
         setData(response.data.sort());
@@ -76,6 +78,7 @@ export default function ModalRestaurant(props) {
               <Button
                 variant="light"
                 key={index}
+                style={{ margin: "2px" }}
                 onClick={() => {
                   props.setmodalrestaurant(false);
                   setCusineSelected(item);

@@ -45,6 +45,7 @@ export default function ModalSong(props) {
           setShowArtist(false);
         }}
         genre={genre}
+        setShowArtist={setShowArtist}
       />
       <Modal
         {...props}
@@ -57,11 +58,12 @@ export default function ModalSong(props) {
         </Modal.Header>
         <Modal.Body>
           <div>
-            <input type="text" value={search} onChange={handleChange} />
-
+            Search: <input type="text" value={search} onChange={handleChange} />{" "}
+            <br />
             {filteredInfo.map((item, index) => (
               <Button
                 variant="light"
+                style={{ margin: "2px" }}
                 key={index}
                 onClick={() => {
                   setGenre(item);

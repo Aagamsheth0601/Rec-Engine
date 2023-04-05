@@ -2,10 +2,11 @@ import Button from "react-bootstrap/Button";
 import Modal from "react-bootstrap/Modal";
 import axios from "axios";
 import React, { useState, useEffect } from "react";
-
+import ModalArtistSongs from "./modalArtistSongs";
 export default function ModalSongArtist(props) {
   const [data, setData] = useState([]);
-
+  const [show, setShow] = useState(false);
+  const [artistId, setArtistId] = useState(null);
   useEffect(() => {
     axios
       .get(
@@ -21,6 +22,15 @@ export default function ModalSongArtist(props) {
 
   return (
     <>
+      <ModalArtistSongs
+        show={show}
+        onHide={() => {
+          props.setShowArtist(true);
+          setArtistId(null);
+          setShow(false);
+        }}
+        artistId={artistId}
+      />
       <Modal
         {...props}
         size="lg"
@@ -35,7 +45,16 @@ export default function ModalSongArtist(props) {
             {/* <input type="text" value={search} onChange={handleChange} /> */}
 
             {data.map((item, index) => (
-              <Button variant="light" key={index}>
+              <Button
+                style={{ margin: "5px" }}
+                onClick={() => {
+                  setShow(true);
+                  props.setShowArtist(false);
+                  setArtistId(item.id);
+                }}
+                variant="light"
+                key={index}
+              >
                 {item.name}
               </Button>
             ))}
