@@ -60,7 +60,7 @@ export default function Interactive() {
         }}
       >
         <Spline
-          scene="https://prod.spline.design/49Id9tLwIHZ-xsa3/scene.splinecode"
+          scene="https://prod.spline.design/Orch76pE2WjIk5mI/scene.splinecode"
           onMouseDown={onMouseDown}
         />
       </div>
