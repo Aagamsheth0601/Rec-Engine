@@ -1,18 +1,24 @@
-import { GoogleLogout } from 'react-google-login';
+import { GoogleLogout } from "react-google-login";
 
-const client_id = "808665823142-af24qudscmqice38qgpda2mde8qplo20.apps.googleusercontent.com";
+const client_id =
+  "808665823142-af24qudscmqice38qgpda2mde8qplo20.apps.googleusercontent.com";
 
-function Logout() {
+function Logout(props) {
   return (
     <div id="signOutButton">
       <GoogleLogout
         client_id={client_id}
         buttonText={"Logout"}
-        onLogoutSuccess={(response) => { console.log("Logout Success"); }}
-        onFailure={(response) => { console.log(response); }}
+        onLogoutSuccess={(response) => {
+          props.setEmail("");
+          console.log("Logout Success");
+        }}
+        onFailure={(response) => {
+          console.log(response);
+        }}
       />
     </div>
-  )
+  );
 }
 
 export default Logout;
