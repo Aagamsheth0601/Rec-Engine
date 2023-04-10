@@ -57,6 +57,7 @@ export default function ModalRestaurant(props) {
         setModalRestaurantBasedOnCusine={setModalRestaurantBasedOnCusine}
         longitude={props.longitude}
         latitude={props.latitude}
+        email={props.email}
       />
 
       <Modal

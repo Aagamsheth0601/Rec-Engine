@@ -1,12 +1,14 @@
 import Spline from "@splinetool/react-spline";
 import ModalTemplate from "./modalTemplate";
-import ModalRestaurant from "./Restaurant/modalRestaurant";
 import React, { useState, useEffect } from "react";
+import ModalRestaurant from "./Restaurant/modalRestaurant";
 import ModalSong from "./Songs/modalSong";
+import ModalPastRecs from "./pastRecs";
 
-export default function Interactive() {
+export default function Interactive(props) {
   const [modalShow, setModalShow] = useState(false);
   const [modalRestaurant, setModalRestaurant] = useState(false);
+  const [modalPastRecs, setModalPastRecs] = useState(false);
   const [location, setLocation] = useState({ latitude: null, longitude: null });
   const [modalSong, setModalSong] = useState(false);
 
@@ -24,10 +26,13 @@ export default function Interactive() {
   }, []);
 
   function onMouseDown(e) {
+    console.log(e.target.name);
     if (e.target.name === "CheckPointRestaurants") {
       setModalRestaurant(true);
     } else if (e.target.name === "CheckPointMusic") {
       setModalSong(true);
+    } else if (e.target.name === 'CheckPointPR') {
+      setModalPastRecs(true);
     } else {
       setModalShow(true);
     }
@@ -36,6 +41,32 @@ export default function Interactive() {
   return (
     <>
       <ModalTemplate show={modalShow} onHide={() => setModalShow(false)} />
+
+
+
+
+
+
+
+      <ModalPastRecs
+        show={modalPastRecs}
+        onHide={() => {
+          setModalPastRecs(false);
+        }}
+        setModalPastRecs={setModalPastRecs}
+        longitude={location["longitude"]}
+        latitude={location["latitude"]}
+        email={props.email}
+      />
+
+
+
+
+
+
+
+
+
       <ModalRestaurant
         show={modalRestaurant}
         onHide={() => {
@@ -45,7 +76,15 @@ export default function Interactive() {
         setmodalrestaurant={setModalRestaurant}
         longitude={location["longitude"]}
         latitude={location["latitude"]}
+        email={props.email}
       />
+
+
+
+
+
+
+
       <ModalSong
         show={modalSong}
         onHide={() => {
@@ -53,6 +92,16 @@ export default function Interactive() {
         }}
         setModalSong={setModalSong}
       />
+
+
+
+
+
+
+
+
+
+
       <div
         style={{
           width: "100%",

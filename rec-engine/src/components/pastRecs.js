@@ -1,18 +1,109 @@
-import React from "react";
+import Button from "react-bootstrap/Button";
+import Modal from "react-bootstrap/Modal";
+import axios from "axios";
+import React, { useState, useEffect } from "react";
+import ModalRestaurantDetail from "./Restaurant/modalRestaurantDetail";
 
-const PastRecs = () => {
+export default function ModalPastRecs(props) {
+  const [data, setData] = useState({});
+  const [restId, setRestId] = useState(0);
+  const [modalRestaurantDetail, setModalRestaurantDetail] = useState(false);
+
+  useEffect(() => {
+    if (props.email !== "") {
+      axios
+        .get(
+          "http://127.0.0.1:8000/restaurant/get_past_recs?email=" +
+          props.email +
+          "&longitude=" +
+          props.longitude +
+          "&latitude=" +
+          props.latitude
+        )
+        .then((res) => {
+          setData(res.data);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    }
+  }, [props.email, props.latitude, props.longitude]);
+
+
+
+  const renderPastRecs = () => {
+    const ret = [];
+    for (let key in data) {
+      ret.push(
+        <div><hr />
+          <div>Since you liked {data[key].name} you may also like </div>
+          <div><hr />
+            {renderData(data[key].similar)}
+          </div>
+        </div>
+      );
+    }
+    return ret;
+  };
+
+
+  const renderData = (data) => {
+    const rows = [];
+    for (let key in data) {
+      rows.push(
+        <Button
+          variant="light"
+          key={key}
+          onClick={() => {
+            setRestId(key);
+            props.setModalPastRecs(false);
+            setModalRestaurantDetail(true);
+          }}
+        >
+          {data[key].name}
+        </Button>
+      );
+    }
+    return rows;
+  };
+
+
+
   return (
-    <div
-      style={{
-        display: "flex",
-        justifyContent: "Right",
-        alignItems: "Right",
-        height: "100vh",
-      }}
-    >
-      <h1>PAST RECOMMENDATIONS</h1>
-    </div>
+    <>
+      <ModalRestaurantDetail
+        show={modalRestaurantDetail}
+        onHide={() => {
+          setRestId(0);
+          props.setModalPastRecs(true);
+          setModalRestaurantDetail(false);
+        }}
+        restId={restId}
+        setRestId={setRestId}
+        longitude={props.longitude}
+        latitude={props.latitude}
+      />
+      <Modal
+        {...props}
+        size="lg"
+        aria-labelledby="contained-modal-title-vcenter"
+        centered
+      >
+        <Modal.Header closeButton>
+          <Modal.Title id="contained-modal-title-vcenter">
+            {props.cusine}
+          </Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <div>
+            <h3>Restaurants</h3>
+            {renderPastRecs()}
+          </div>
+        </Modal.Body>
+        <Modal.Footer>
+          <Button onClick={props.onHide}>Back</Button>
+        </Modal.Footer>
+      </Modal>
+    </>
   );
-};
-
-export default PastRecs;
+}

@@ -9,14 +9,15 @@ export default function ModalRestaurantBasedOnCusine(props) {
 
   useEffect(() => {
     if (props.restId !== 0) {
+      axios.get("http://127.0.0.1:8000/restaurant/insert?rest_id=" + props.restId + "&email=" + props.email).then().catch((err) => { console.log(err); });
       axios
         .get(
           "http://127.0.0.1:8000/restaurant/similar?rest_id=" +
-            props.restId +
-            "&longitude=" +
-            props.longitude +
-            "&latitude=" +
-            props.latitude
+          props.restId +
+          "&longitude=" +
+          props.longitude +
+          "&latitude=" +
+          props.latitude
         )
         .then((res) => {
           setData(res.data);
@@ -35,7 +36,7 @@ export default function ModalRestaurantBasedOnCusine(props) {
           console.log(err);
         });
     }
-  }, [props.restId, props.latitude, props.longitude]);
+  }, [props.restId, props.latitude, props.longitude, props.email]);
 
   const renderData = () => {
     const rows = [];

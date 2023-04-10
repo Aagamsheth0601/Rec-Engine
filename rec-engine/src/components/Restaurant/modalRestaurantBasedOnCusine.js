@@ -16,11 +16,11 @@ export default function ModalRestaurantBasedOnCusine(props) {
       axios
         .get(
           "http://127.0.0.1:8000/restaurant/get_cusine?cusine=" +
-            props.cusine +
-            "&longitude=" +
-            props.longitude +
-            "&latitude=" +
-            props.latitude
+          props.cusine +
+          "&longitude=" +
+          props.longitude +
+          "&latitude=" +
+          props.latitude
         )
         .then((res) => {
           setData(res.data);
@@ -63,6 +63,7 @@ export default function ModalRestaurantBasedOnCusine(props) {
           props.setModalRestaurantBasedOnCusine(true);
           setModalRestaurantDetail(false);
         }}
+        email={props.email}
         restId={restId}
         setRestId={setRestId}
         longitude={props.longitude}

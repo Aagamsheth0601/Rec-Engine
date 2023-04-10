@@ -13,7 +13,7 @@ function App() {
     <Router>
       <Navbar1 setEmail={setEmail} email={email} />
       <Routes>
-        <Route path="/" exact element={<Interactive />} />
+        <Route path="/" exact element={<Interactive email={email} />} />
         <Route path="/about" element={<About />} />
         <Route path="/pastRecs" element={<PastRecs email={email} />} />
       </Routes>
