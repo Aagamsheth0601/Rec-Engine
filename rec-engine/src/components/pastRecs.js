@@ -3,22 +3,24 @@ import Modal from "react-bootstrap/Modal";
 import axios from "axios";
 import React, { useState, useEffect } from "react";
 import ModalRestaurantDetail from "./Restaurant/modalRestaurantDetail";
-
+import Row from "react-bootstrap/Row";
+import Col from "react-bootstrap/Col";
 export default function ModalPastRecs(props) {
   const [data, setData] = useState({});
   const [restId, setRestId] = useState(0);
   const [modalRestaurantDetail, setModalRestaurantDetail] = useState(false);
+  const [dataSong, setDataSong] = useState({});
 
   useEffect(() => {
     if (props.email !== "") {
       axios
         .get(
           "http://127.0.0.1:8000/restaurant/get_past_recs?email=" +
-          props.email +
-          "&longitude=" +
-          props.longitude +
-          "&latitude=" +
-          props.latitude
+            props.email +
+            "&longitude=" +
+            props.longitude +
+            "&latitude=" +
+            props.latitude
         )
         .then((res) => {
           setData(res.data);
@@ -27,17 +29,29 @@ export default function ModalPastRecs(props) {
           console.log(err);
         });
     }
+    if (props.email !== "") {
+      axios
+        .get("http://127.0.0.1:8000/song/get_past_song?email=" + props.email)
+        .then((res) => {
+          setDataSong(res.data);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    }
   }, [props.email, props.latitude, props.longitude]);
-
-
 
   const renderPastRecs = () => {
     const ret = [];
     for (let key in data) {
       ret.push(
-        <div><hr />
-          <div>Since you liked {data[key].name} you may also like </div>
-          <div><hr />
+        <div>
+          <hr />
+          <div>
+            Since you liked <b> {data[key].name}</b> you may also like{" "}
+          </div>
+          <div>
+            <hr />
             {renderData(data[key].similar)}
           </div>
         </div>
@@ -46,7 +60,60 @@ export default function ModalPastRecs(props) {
     return ret;
   };
 
+  const renderPastRecsSong = () => {
+    const ret = [];
+    for (let key in dataSong) {
+      ret.push(
+        <div>
+          <hr />
+          <div>
+            Since you liked <b> {dataSong[key].name}</b> you may also like{" "}
+          </div>
+          <div>
+            <hr />
+            {renderDataSong(dataSong[key].similar)}
+          </div>
+        </div>
+      );
+    }
+    return ret;
+  };
 
+  const renderDataSong = (data) => {
+    const rows = [];
+    for (let key in data) {
+      rows.push(
+        <>
+          <Row>
+            <Col xs={3}>
+              <img
+                style={{ height: "150px", width: "150px" }}
+                src={data[key].album.images[1].url}
+              />
+            </Col>
+            <Col>
+              <p>Name: {data[key].name}</p>
+              <p>
+                Link to song:{" "}
+                <a target="__blank" href={data[key].external_urls.spotify}>
+                  Link
+                </a>
+              </p>
+              <p>
+                Preview:{" "}
+                <a target="__blank" href={data[key].preview_url}>
+                  Link
+                </a>
+              </p>
+            </Col>
+          </Row>
+          <hr />
+        </>
+      );
+    }
+
+    return rows;
+  };
   const renderData = (data) => {
     const rows = [];
     for (let key in data) {
@@ -67,8 +134,6 @@ export default function ModalPastRecs(props) {
     return rows;
   };
 
-
-
   return (
     <>
       <ModalRestaurantDetail
@@ -83,6 +148,7 @@ export default function ModalPastRecs(props) {
         longitude={props.longitude}
         latitude={props.latitude}
       />
+
       <Modal
         {...props}
         size="lg"
@@ -98,6 +164,10 @@ export default function ModalPastRecs(props) {
           <div>
             <h3>Restaurants</h3>
             {renderPastRecs()}
+          </div>
+          <div>
+            <h3>Songs</h3>
+            {renderPastRecsSong()}
           </div>
         </Modal.Body>
         <Modal.Footer>

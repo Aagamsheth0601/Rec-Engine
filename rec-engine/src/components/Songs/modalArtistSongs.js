@@ -4,9 +4,23 @@ import axios from "axios";
 import React, { useState, useEffect } from "react";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
+
 export default function ModalArtistSongs(props) {
   const [data, setData] = useState([]);
+  const [sId, setsId] = useState("");
 
+  const insert = () => {
+    axios
+      .get(
+        `http://127.0.0.1:8000/song/insert?email=${props.email}&songId=${sId}&artistId=${props.artistId}&genre=${props.genre}`
+      )
+      .then((response) => {
+        console.log(response.data);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
   useEffect(() => {
     axios
       .get(
@@ -14,6 +28,7 @@ export default function ModalArtistSongs(props) {
           props.artistId
       )
       .then((response) => {
+        console.log(response);
         setData(response.data);
       })
       .catch((err) => {
@@ -49,7 +64,15 @@ export default function ModalArtistSongs(props) {
                     <p>Name: {item.name}</p>
                     <p>
                       Link to song:{" "}
-                      <a target="__blank" href={item.external_urls.spotify}>
+                      <a
+                        onClick={() => {
+                          setsId(item.id);
+                          console.log(item.id);
+                          insert();
+                        }}
+                        target="__blank"
+                        href={item.external_urls.spotify}
+                      >
                         Link
                       </a>
                     </p>

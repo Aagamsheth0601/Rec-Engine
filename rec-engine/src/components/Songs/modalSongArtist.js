@@ -30,6 +30,8 @@ export default function ModalSongArtist(props) {
           setShow(false);
         }}
         artistId={artistId}
+        email={props.email}
+        genre={props.genre}
       />
       <Modal
         {...props}

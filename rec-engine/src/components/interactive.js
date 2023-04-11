@@ -31,7 +31,7 @@ export default function Interactive(props) {
       setModalRestaurant(true);
     } else if (e.target.name === "CheckPointMusic") {
       setModalSong(true);
-    } else if (e.target.name === 'CheckPointPR') {
+    } else if (e.target.name === "CheckPointPR") {
       setModalPastRecs(true);
     } else {
       setModalShow(true);
@@ -41,12 +41,6 @@ export default function Interactive(props) {
   return (
     <>
       <ModalTemplate show={modalShow} onHide={() => setModalShow(false)} />
-
-
-
-
-
-
 
       <ModalPastRecs
         show={modalPastRecs}
@@ -58,14 +52,6 @@ export default function Interactive(props) {
         latitude={location["latitude"]}
         email={props.email}
       />
-
-
-
-
-
-
-
-
 
       <ModalRestaurant
         show={modalRestaurant}
@@ -79,28 +65,14 @@ export default function Interactive(props) {
         email={props.email}
       />
 
-
-
-
-
-
-
       <ModalSong
         show={modalSong}
         onHide={() => {
           setModalSong(false);
         }}
         setModalSong={setModalSong}
+        email={props.email}
       />
-
-
-
-
-
-
-
-
-
 
       <div
         style={{
