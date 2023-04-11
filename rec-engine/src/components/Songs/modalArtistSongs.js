@@ -9,10 +9,10 @@ export default function ModalArtistSongs(props) {
   const [data, setData] = useState([]);
   const [sId, setsId] = useState("");
 
-  const insert = () => {
+  const insert = (X) => {
     axios
       .get(
-        `http://127.0.0.1:8000/song/insert?email=${props.email}&songId=${sId}&artistId=${props.artistId}&genre=${props.genre}`
+        `http://127.0.0.1:8000/song/insert?email=${props.email}&songId=${X}&artistId=${props.artistId}&genre=${props.genre}`
       )
       .then((response) => {
         console.log(response.data);
@@ -68,7 +68,7 @@ export default function ModalArtistSongs(props) {
                         onClick={() => {
                           setsId(item.id);
                           console.log(item.id);
-                          insert();
+                          insert(item.id);
                         }}
                         target="__blank"
                         href={item.external_urls.spotify}

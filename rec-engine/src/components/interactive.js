@@ -4,6 +4,7 @@ import React, { useState, useEffect } from "react";
 import ModalRestaurant from "./Restaurant/modalRestaurant";
 import ModalSong from "./Songs/modalSong";
 import ModalPastRecs from "./pastRecs";
+import ModalMovie from "./Movies/modalMovieName";
 
 export default function Interactive(props) {
   const [modalShow, setModalShow] = useState(false);
@@ -11,6 +12,7 @@ export default function Interactive(props) {
   const [modalPastRecs, setModalPastRecs] = useState(false);
   const [location, setLocation] = useState({ latitude: null, longitude: null });
   const [modalSong, setModalSong] = useState(false);
+  const [modalMovie, setModalMovie] = useState(false);
 
   useEffect(() => {
     if (navigator.geolocation) {
@@ -33,6 +35,8 @@ export default function Interactive(props) {
       setModalSong(true);
     } else if (e.target.name === "CheckPointPR") {
       setModalPastRecs(true);
+    } else if (e.target.name === "CheckPointMovie"){
+      setModalMovie(true);
     } else {
       setModalShow(true);
     }
@@ -71,6 +75,15 @@ export default function Interactive(props) {
           setModalSong(false);
         }}
         setModalSong={setModalSong}
+        email={props.email}
+      />
+      
+      <ModalMovie
+        show={modalMovie}
+        onHide={() => {
+          setModalMovie(false);
+        }}
+        setModalMovie={setModalMovie}
         email={props.email}
       />
 
