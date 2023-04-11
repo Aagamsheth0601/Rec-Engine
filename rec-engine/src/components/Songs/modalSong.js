@@ -3,12 +3,14 @@ import Modal from "react-bootstrap/Modal";
 import axios from "axios";
 import React, { useState, useEffect } from "react";
 import ModalSongArtist from "./modalSongArtist";
+
 export default function ModalSong(props) {
   const [data, setData] = useState([]);
   const [filteredInfo, setFilteredInfo] = useState([]);
   const [search, setSearch] = useState("");
   const [genre, setGenre] = useState("");
   const [artist, setShowArtist] = useState(false);
+  const [loading, setLoading] = useState(true);
 
   const handleChange = (e) => {
     const searchText = e.target.value;
@@ -24,16 +26,26 @@ export default function ModalSong(props) {
   };
 
   useEffect(() => {
-    axios
-      .get("http://127.0.0.1:8000/song/get_allGenre")
-      .then((response) => {
-        setFilteredInfo(response.data.sort());
-        setData(response.data.sort());
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-  }, []);
+    const fetchData = async () => {
+      try {
+        const response = await axios.get("http://127.0.0.1:8000/song/get_allGenre");
+        setData(response.data);
+        setFilteredInfo(response.data);
+        setLoading(false);
+      } catch (error) {
+        console.error("Error fetching data:", error);
+        setLoading(false);
+      }
+    };
+    if (props.modalSong) {
+      fetchData();
+    } else {
+      setSearch("")
+      setData([]);
+      setFilteredInfo([]);
+      setLoading(true);
+    }
+  }, [props.modalSong]);
 
   return (
     <>
@@ -44,6 +56,7 @@ export default function ModalSong(props) {
           props.setModalSong(true);
           setShowArtist(false);
         }}
+        artist={artist}
         genre={genre}
         setShowArtist={setShowArtist}
         email={props.email}
@@ -58,24 +71,26 @@ export default function ModalSong(props) {
           <Modal.Title id="contained-modal-title-vcenter">Genres</Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          <div>
-            Search: <input type="text" value={search} onChange={handleChange} />{" "}
-            <br />
-            {filteredInfo.map((item, index) => (
-              <Button
-                variant="light"
-                style={{ margin: "2px" }}
-                key={index}
-                onClick={() => {
-                  setGenre(item);
-                  props.setModalSong(false);
-                  setShowArtist(true);
-                }}
-              >
-                {item}
-              </Button>
-            ))}
-          </div>
+          {loading ? <div>Loading...</div> :
+            <div>
+              Search: <input type="text" value={search} onChange={handleChange} />{" "}
+              <br />
+              {filteredInfo.map((item, index) => (
+                <Button
+                  variant="light"
+                  style={{ margin: "2px" }}
+                  key={index}
+                  onClick={() => {
+                    setGenre(item);
+                    props.setModalSong(false);
+                    setShowArtist(true);
+                  }}
+                >
+                  {item}
+                </Button>
+              ))}
+            </div>
+          }
         </Modal.Body>
         <Modal.Footer>
           <Button onClick={props.onHide}>Close</Button>

@@ -51,6 +51,7 @@ export default function Interactive(props) {
         onHide={() => {
           setModalPastRecs(false);
         }}
+        modalPastRecs={modalPastRecs}
         setModalPastRecs={setModalPastRecs}
         longitude={location["longitude"]}
         latitude={location["latitude"]}
@@ -74,6 +75,7 @@ export default function Interactive(props) {
         onHide={() => {
           setModalSong(false);
         }}
+        modalSong={modalSong}
         setModalSong={setModalSong}
         email={props.email}
       />
@@ -83,6 +85,7 @@ export default function Interactive(props) {
         onHide={() => {
           setModalMovie(false);
         }}
+        modalMovie={modalMovie}
         setModalMovie={setModalMovie}
         email={props.email}
       />

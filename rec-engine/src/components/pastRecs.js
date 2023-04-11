@@ -5,41 +5,38 @@ import React, { useState, useEffect } from "react";
 import ModalRestaurantDetail from "./Restaurant/modalRestaurantDetail";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
+
+
 export default function ModalPastRecs(props) {
   const [data, setData] = useState({});
   const [restId, setRestId] = useState(0);
   const [modalRestaurantDetail, setModalRestaurantDetail] = useState(false);
   const [dataSong, setDataSong] = useState({});
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    if (props.email !== "") {
-      axios
-        .get(
-          "http://127.0.0.1:8000/restaurant/get_past_recs?email=" +
-            props.email +
-            "&longitude=" +
-            props.longitude +
-            "&latitude=" +
-            props.latitude
-        )
-        .then((res) => {
-          setData(res.data);
-        })
-        .catch((err) => {
-          console.log(err);
-        });
+    const fetchData = async () => {
+      try {
+        let response = await axios.get("http://127.0.0.1:8000/restaurant/get_past_recs?email=" + props.email + "&longitude=" + props.longitude + "&latitude=" + props.latitude);
+        setData(response.data);
+
+        response = await axios.get("http://127.0.0.1:8000/song/get_past_song?email=" + props.email);
+        setDataSong(response.data);
+
+        setLoading(false);
+      } catch (error) {
+        console.error("Error fetching data:", error);
+        setLoading(false);
+      }
+    };
+    if (props.modalPastRecs) {
+      fetchData();
+    } else {
+      setData({});
+      setDataSong({});
+      setLoading(true);
     }
-    if (props.email !== "") {
-      axios
-        .get("http://127.0.0.1:8000/song/get_past_song?email=" + props.email)
-        .then((res) => {
-          setDataSong(res.data);
-        })
-        .catch((err) => {
-          console.log(err);
-        });
-    }
-  }, [props.email, props.latitude, props.longitude]);
+  }, [props.modalPastRecs, props.email, props.latitude, props.longitude]);
 
   const renderPastRecs = () => {
     const ret = [];
@@ -114,6 +111,8 @@ export default function ModalPastRecs(props) {
 
     return rows;
   };
+
+
   const renderData = (data) => {
     const rows = [];
     for (let key in data) {
@@ -157,18 +156,22 @@ export default function ModalPastRecs(props) {
       >
         <Modal.Header closeButton>
           <Modal.Title id="contained-modal-title-vcenter">
-            {props.cusine}
+            Past Recommendations
           </Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          <div>
-            <h3>Restaurants</h3>
-            {renderPastRecs()}
-          </div>
-          <div>
-            <h3>Songs</h3>
-            {renderPastRecsSong()}
-          </div>
+          {loading ? <div>Loading...</div> :
+            <div>
+              <div>
+                <h3>Restaurants</h3>
+                {renderPastRecs()}
+              </div>
+              <div>
+                <h3>Songs</h3>
+                {renderPastRecsSong()}
+              </div>
+            </div>
+          }
         </Modal.Body>
         <Modal.Footer>
           <Button onClick={props.onHide}>Back</Button>

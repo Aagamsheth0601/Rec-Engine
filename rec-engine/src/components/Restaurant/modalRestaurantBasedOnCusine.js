@@ -3,52 +3,49 @@ import Modal from "react-bootstrap/Modal";
 import axios from "axios";
 import React, { useState, useEffect } from "react";
 import ModalRestaurantDetail from "./modalRestaurantDetail";
-import Container from "react-bootstrap/Container";
-import Row from "react-bootstrap/Row";
-import Col from "react-bootstrap/Col";
+
+
 export default function ModalRestaurantBasedOnCusine(props) {
   const [data, setData] = useState({});
   const [restId, setRestId] = useState(0);
   const [modalRestaurantDetail, setModalRestaurantDetail] = useState(false);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    if (props.cusine !== null) {
-      axios
-        .get(
-          "http://127.0.0.1:8000/restaurant/get_cusine?cusine=" +
-          props.cusine +
-          "&longitude=" +
-          props.longitude +
-          "&latitude=" +
-          props.latitude
-        )
-        .then((res) => {
-          setData(res.data);
-        })
-        .catch((err) => {
-          console.log(err);
-        });
+    const fetchData = async () => {
+      try {
+        const response = await axios.get("http://127.0.0.1:8000/restaurant/get_cusine?cusine=" + props.cusine + "&longitude=" + props.longitude + "&latitude=" + props.latitude);
+        setData(response.data);
+        setLoading(false);
+      } catch (error) {
+        console.error("Error fetching data:", error);
+        setLoading(false);
+      }
+    };
+    if (props.modalRestaurantBasedOnCusine) {
+      fetchData();
+    } else {
+      setData([]);
+      setLoading(true);
     }
-  }, [props.cusine, props.latitude, props.longitude]);
+  }, [props.modalRestaurantBasedOnCusine, props.cusine, props.latitude, props.longitude]);
 
   const renderData = () => {
     const rows = [];
 
     for (let key in data) {
       rows.push(
-        <Col xs={6}>
-          <Button
-            variant="light"
-            key={key}
-            onClick={() => {
-              setRestId(key);
-              props.setModalRestaurantBasedOnCusine(false);
-              setModalRestaurantDetail(true);
-            }}
-          >
-            {data[key].name}
-          </Button>
-        </Col>
+        <Button
+          variant="light"
+          key={key}
+          onClick={() => {
+            setRestId(key);
+            props.setModalRestaurantBasedOnCusine(false);
+            setModalRestaurantDetail(true);
+          }}
+        >
+          {data[key].name}
+        </Button>
       );
     }
     return rows;
@@ -65,6 +62,7 @@ export default function ModalRestaurantBasedOnCusine(props) {
         }}
         email={props.email}
         restId={restId}
+        modalRestaurantDetail={modalRestaurantDetail}
         setRestId={setRestId}
         longitude={props.longitude}
         latitude={props.latitude}
@@ -82,9 +80,7 @@ export default function ModalRestaurantBasedOnCusine(props) {
         </Modal.Header>
 
         <Modal.Body>
-          <Container>
-            <Row>{renderData()}</Row>
-          </Container>
+          {loading ? <div>Loading...</div> : renderData()}
         </Modal.Body>
         <Modal.Footer>
           <Button onClick={props.onHide}>Back</Button>

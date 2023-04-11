@@ -32,9 +32,9 @@ const Navbar1 = (props) => {
             <Nav.Link href="/about" activeStyle>
               About
             </Nav.Link>
-            <Nav.Link href="/pastRecs" activeStyle>
+            {/* <Nav.Link href="/pastRecs" activeStyle>
               Past Recommendations{" "}
-            </Nav.Link>
+            </Nav.Link> */}
           </Nav>
         </Navbar.Collapse>
 
