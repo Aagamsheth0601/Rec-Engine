@@ -6,21 +6,30 @@ import ModalRestaurantDetail from "./Restaurant/modalRestaurantDetail";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 
-
 export default function ModalPastRecs(props) {
   const [data, setData] = useState({});
   const [restId, setRestId] = useState(0);
   const [modalRestaurantDetail, setModalRestaurantDetail] = useState(false);
   const [dataSong, setDataSong] = useState({});
+  const [dataMovie, setDataMovie] = useState({});
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        let response = await axios.get("http://127.0.0.1:8000/restaurant/get_past_recs?email=" + props.email + "&longitude=" + props.longitude + "&latitude=" + props.latitude);
+        let response = await axios.get(
+          "http://127.0.0.1:8000/restaurant/get_past_recs?email=" +
+            props.email +
+            "&longitude=" +
+            props.longitude +
+            "&latitude=" +
+            props.latitude
+        );
         setData(response.data);
 
-        response = await axios.get("http://127.0.0.1:8000/song/get_past_song?email=" + props.email);
+        response = await axios.get(
+          "http://127.0.0.1:8000/song/get_past_song?email=" + props.email
+        );
         setDataSong(response.data);
 
         setLoading(false);
@@ -112,7 +121,6 @@ export default function ModalPastRecs(props) {
     return rows;
   };
 
-
   const renderData = (data) => {
     const rows = [];
     for (let key in data) {
@@ -162,7 +170,9 @@ export default function ModalPastRecs(props) {
           </Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          {loading ? <div>Loading...</div> :
+          {loading ? (
+            <div>Loading...</div>
+          ) : (
             <div>
               <div>
                 <h3>Restaurants</h3>
@@ -173,7 +183,7 @@ export default function ModalPastRecs(props) {
                 {renderPastRecsSong()}
               </div>
             </div>
-          }
+          )}
         </Modal.Body>
         <Modal.Footer>
           <Button onClick={props.onHide}>Back</Button>

@@ -9,14 +9,20 @@ import Col from "react-bootstrap/Col";
 export default function ModalMovieRec(props) {
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(true);
-
-
+  const [data2, setData2] = useState({});
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axios.get("http://127.0.0.1:8000/movie/get_allRecommendations?movieName=" + props.name);
+        const response = await axios.get(
+          "http://127.0.0.1:8000/movie/get_allRecommendations?movieName=" +
+            props.name
+        );
         setData(response.data);
-        console.error("Hello", response.data);
+        const res = await axios.get(
+          "http://127.0.0.1:8000/movie/getMovieDetails?movieName=" + props.name
+        );
+        setData2(res.data);
+        console.error("Hello", res.data);
         setLoading(false);
       } catch (error) {
         console.error("Error fetching data:", error);
@@ -35,7 +41,10 @@ export default function ModalMovieRec(props) {
     setLoading(true);
     props.setName(value);
     try {
-      const response = await axios.get("http://127.0.0.1:8000/movie/get_allRecommendations?movieName=" + props.name);
+      const response = await axios.get(
+        "http://127.0.0.1:8000/movie/get_allRecommendations?movieName=" +
+          props.name
+      );
       setData(response.data);
       console.error("Hello", response.data);
       setLoading(false);
@@ -54,14 +63,32 @@ export default function ModalMovieRec(props) {
         centered
       >
         <Modal.Header closeButton>
-          <Modal.Title id="contained-modal-title-vcenter">Movies Recommended</Modal.Title>
+          <Modal.Title id="contained-modal-title-vcenter">
+            Movies Recommended
+          </Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          {loading ?
+          {loading ? (
             <div>Loading...</div>
-            :
+          ) : (
             <div>
-              <b>{props.name}</b>
+              <Row>
+                <Col xs={3}>
+                  <img
+                    style={{ height: "150px", width: "150px" }}
+                    src={data2[0]["Image"]}
+                  />
+                </Col>
+                <Col>
+                  <p>Name: {data2[0]["Movie Name"]}</p>
+                  <p>
+                    Link to IMDB:{" "}
+                    <a target="__blank" href={data2[0]["Link"]}>
+                      Link
+                    </a>
+                  </p>
+                </Col>
+              </Row>
               <hr />
               <b>Similar Movies:</b>
               <br />
@@ -78,19 +105,23 @@ export default function ModalMovieRec(props) {
                       <p>Name: {data[0][index]}</p>
                       <p>
                         Link to IMDB:{" "}
-                        <a
-                          target="__blank"
-                          href={data[2][index]}
-                        >
+                        <a target="__blank" href={data[2][index]}>
                           Link
                         </a>
                       </p>
                       <p>
                         Link to Recommendations:{" "}
-                        <Button onClick={() => { fetchData(data[0][index]) }}>Here</Button>
+                        <Button
+                          onClick={() => {
+                            fetchData(data[0][index]);
+                          }}
+                        >
+                          Here
+                        </Button>
                       </p>
                     </Col>
                   </Row>
+                  <hr></hr>
                 </>
                 // <Button
                 //   variant="light"
@@ -106,8 +137,7 @@ export default function ModalMovieRec(props) {
                 // </Button>
               ))}
             </div>
-          }
-
+          )}
         </Modal.Body>
         <Modal.Footer>
           <Button onClick={props.onHide}>Close</Button>
