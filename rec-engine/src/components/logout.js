@@ -11,6 +11,7 @@ function Logout(props) {
         buttonText={"Logout"}
         onLogoutSuccess={(response) => {
           props.setEmail("");
+          props.setName("");
           console.log("Logout Success");
         }}
         onFailure={(response) => {

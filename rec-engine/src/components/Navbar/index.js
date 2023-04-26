@@ -4,7 +4,7 @@ import Navbar from "react-bootstrap/Navbar";
 import NavDropdown from "react-bootstrap/NavDropdown";
 import Login from "../login";
 import Logout from "../logout";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { gapi } from "gapi-script";
 
 const client_id =
@@ -12,6 +12,8 @@ const client_id =
 const scope = "https://www.googleapis.com/auth/drive";
 
 const Navbar1 = (props) => {
+  const [name, setName] = useState('');
+
   useEffect(() => {
     function start() {
       gapi.client.init({
@@ -21,6 +23,7 @@ const Navbar1 = (props) => {
     }
     gapi.load("client:auth2", start);
   });
+
   return (
     <Navbar bg="light" expand="lg">
       <Container>
@@ -39,11 +42,11 @@ const Navbar1 = (props) => {
         </Navbar.Collapse>
 
         <Navbar.Collapse className="justify-content-end">
-          {props.email}
+          {name}
           {props.email !== "" ? (
-            <Logout setEmail={props.setEmail} />
+            <Logout setEmail={props.setEmail} setName={setName} />
           ) : (
-            <Login setEmail={props.setEmail} />
+            <Login setEmail={props.setEmail} setName={setName} />
           )}
         </Navbar.Collapse>
       </Container>

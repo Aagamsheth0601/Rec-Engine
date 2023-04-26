@@ -9,6 +9,7 @@ function Login(props) {
     let email = res.profileObj.email;
     console.log("EMAIL", email);
     props.setEmail(email);
+    props.setName(res.profileObj.givenName.charAt(0).toUpperCase() + res.profileObj.givenName.slice(1).toLowerCase() + ' ' + res.profileObj.familyName.charAt(0).toUpperCase() + res.profileObj.familyName.slice(1).toLowerCase());
   };
 
   const onFailure = (err) => {

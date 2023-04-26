@@ -142,7 +142,9 @@ export default function ModalPastRecs(props) {
           props.setModalPastRecs(true);
           setModalRestaurantDetail(false);
         }}
+        email={props.email}
         restId={restId}
+        modalRestaurantDetail={modalRestaurantDetail}
         setRestId={setRestId}
         longitude={props.longitude}
         latitude={props.latitude}
