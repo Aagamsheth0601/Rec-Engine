@@ -10,12 +10,13 @@ export default function ModalMovieRec(props) {
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(true);
   const [data2, setData2] = useState({});
+
   useEffect(() => {
     const fetchData = async () => {
       try {
         const response = await axios.get(
           "http://127.0.0.1:8000/movie/get_allRecommendations?movieName=" +
-            props.name
+          props.name
         );
         setData(response.data);
         const res = await axios.get(
@@ -39,23 +40,6 @@ export default function ModalMovieRec(props) {
       setLoading(true);
     }
   }, [props.name, props.showModal]);
-
-  const fetchData = async (value) => {
-    setLoading(true);
-    props.setName(value);
-    try {
-      const response = await axios.get(
-        "http://127.0.0.1:8000/movie/get_allRecommendations?movieName=" +
-          props.name
-      );
-      setData(response.data);
-      console.error("Hello", response.data);
-      setLoading(false);
-    } catch (error) {
-      console.error("Error fetching data:", error);
-      setLoading(false);
-    }
-  };
 
   return (
     <>
@@ -116,7 +100,8 @@ export default function ModalMovieRec(props) {
                         Link to Recommendations:{" "}
                         <Button
                           onClick={() => {
-                            fetchData(data[0][index]);
+                            setLoading(true);
+                            props.setName(data[0][index]);
                           }}
                         >
                           Here

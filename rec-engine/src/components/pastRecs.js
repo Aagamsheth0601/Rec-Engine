@@ -3,6 +3,7 @@ import Modal from "react-bootstrap/Modal";
 import axios from "axios";
 import React, { useState, useEffect } from "react";
 import ModalRestaurantDetail from "./Restaurant/modalRestaurantDetail";
+import ModalMovieRec from "./Movies/modalMovieRec"
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 
@@ -11,7 +12,11 @@ export default function ModalPastRecs(props) {
   const [restId, setRestId] = useState(0);
   const [modalRestaurantDetail, setModalRestaurantDetail] = useState(false);
   const [dataSong, setDataSong] = useState({});
-  const [dataMovie, setDataMovie] = useState({});
+
+  const [dataMovie, setDataMovie] = useState([]);
+  const [movieName, setMovieName] = useState("");
+  const [modalMovie, setModalMovie] = useState(false);
+
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -19,11 +24,11 @@ export default function ModalPastRecs(props) {
       try {
         let response = await axios.get(
           "http://127.0.0.1:8000/restaurant/get_past_recs?email=" +
-            props.email +
-            "&longitude=" +
-            props.longitude +
-            "&latitude=" +
-            props.latitude
+          props.email +
+          "&longitude=" +
+          props.longitude +
+          "&latitude=" +
+          props.latitude
         );
         setData(response.data);
 
@@ -35,7 +40,6 @@ export default function ModalPastRecs(props) {
         response = await axios.get(
           "http://127.0.0.1:8000/movie/get_past_recs?email=" + props.email
         );
-        console.log(response.data);
         setDataMovie(response.data);
         setLoading(false);
       } catch (error) {
@@ -71,6 +75,26 @@ export default function ModalPastRecs(props) {
     return ret;
   };
 
+  const renderData = (data) => {
+    const rows = [];
+    for (let key in data) {
+      rows.push(
+        <Button
+          variant="light"
+          key={key}
+          onClick={() => {
+            setRestId(key);
+            props.setModalPastRecs(false);
+            setModalRestaurantDetail(true);
+          }}
+        >
+          {data[key].name}
+        </Button>
+      );
+    }
+    return rows;
+  };
+
   const renderPastRecsSong = () => {
     const ret = [];
     for (let key in dataSong) {
@@ -83,25 +107,6 @@ export default function ModalPastRecs(props) {
           <div>
             <hr />
             {renderDataSong(dataSong[key].similar)}
-          </div>
-        </div>
-      );
-    }
-    return ret;
-  };
-  
-  const renderPastRecsMovie = () => {
-    const ret = [];
-    for (let key in dataMovie) {
-      ret.push(
-        <div>
-          <hr />
-          <div>
-            Since you liked <b> {dataMovie[key]['name']}</b> you may also like{" "}
-          </div>
-          <div>
-            <hr />
-            {renderDataMovie(data[key]['rec'])}
           </div>
         </div>
       );
@@ -145,35 +150,41 @@ export default function ModalPastRecs(props) {
     return rows;
   };
 
-  const renderData = (data) => {
-    const rows = [];
-    for (let key in data) {
-      rows.push(
-        <Button
-          variant="light"
-          key={key}
-          onClick={() => {
-            setRestId(key);
-            props.setModalPastRecs(false);
-            setModalRestaurantDetail(true);
-          }}
-        >
-          {data[key].name}
-        </Button>
+  const renderPastRecsMovie = () => {
+    const ret = [];
+    for (let key in dataMovie) {
+      ret.push(
+        <div>
+          <hr />
+          <div>
+            Since you liked <b> {dataMovie[key]['name']}</b> you may also like{" "}
+          </div>
+          <div>
+            <hr />
+            {renderDataMovie(dataMovie[key]['rec'])}
+          </div>
+        </div>
       );
     }
-    return rows;
+    return ret;
   };
-  
+
   const renderDataMovie = (data) => {
     const rows = [];
+    console.log(data);
     for (let key in data) {
       rows.push(
         <Button
           variant="light"
-          key={key}
+          style={{ margin: "2px" }}
+          key={data[key]}
+          onClick={() => {
+            setModalMovie(true);
+            setMovieName(data[key]);
+            props.setModalPastRecs(false);
+          }}
         >
-          {key}
+          {data[key]}
         </Button>
       );
     }
@@ -195,6 +206,19 @@ export default function ModalPastRecs(props) {
         setRestId={setRestId}
         longitude={props.longitude}
         latitude={props.latitude}
+      />
+
+      <ModalMovieRec
+        show={modalMovie}
+        onHide={() => {
+          setModalMovie(false);
+          setMovieName("");
+          props.setModalPastRecs(true);
+        }}
+        name={movieName}
+        showModal={modalMovie}
+        setName={setMovieName}
+        email={props.email}
       />
 
       <Modal
