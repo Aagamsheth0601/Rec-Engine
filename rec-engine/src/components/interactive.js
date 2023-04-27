@@ -35,11 +35,19 @@ export default function Interactive(props) {
       setModalSong(true);
     } else if (e.target.name === "CheckPointPR") {
       setModalPastRecs(true);
-    } else if (e.target.name === "CheckPointMovie"){
+    } else if (e.target.name === "CheckPointMovie") {
       setModalMovie(true);
     } else {
       setModalShow(true);
     }
+  }
+
+  if (props.email === '' || location['latitude'] === null || location['longitude'] === null) {
+    return (
+      <div>
+        Please Login and Give Permission to Location
+      </div>
+    )
   }
 
   return (
@@ -79,7 +87,7 @@ export default function Interactive(props) {
         setModalSong={setModalSong}
         email={props.email}
       />
-      
+
       <ModalMovie
         show={modalMovie}
         onHide={() => {
