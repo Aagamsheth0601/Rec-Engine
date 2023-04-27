@@ -22,6 +22,9 @@ export default function ModalMovieRec(props) {
           "http://127.0.0.1:8000/movie/getMovieDetails?movieName=" + props.name
         );
         setData2(res.data);
+        const ins = await axios.get(
+          "http://127.0.0.1:8000/movie/insert?movieName=" + props.name + "&email=" + props.email
+        );
         console.error("Hello", res.data);
         setLoading(false);
       } catch (error) {

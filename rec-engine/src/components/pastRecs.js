@@ -32,6 +32,11 @@ export default function ModalPastRecs(props) {
         );
         setDataSong(response.data);
 
+        response = await axios.get(
+          "http://127.0.0.1:8000/movie/get_past_recs?email=" + props.email
+        );
+        console.log(response.data);
+        setDataMovie(response.data);
         setLoading(false);
       } catch (error) {
         console.error("Error fetching data:", error);
@@ -78,6 +83,25 @@ export default function ModalPastRecs(props) {
           <div>
             <hr />
             {renderDataSong(dataSong[key].similar)}
+          </div>
+        </div>
+      );
+    }
+    return ret;
+  };
+  
+  const renderPastRecsMovie = () => {
+    const ret = [];
+    for (let key in dataMovie) {
+      ret.push(
+        <div>
+          <hr />
+          <div>
+            Since you liked <b> {dataMovie[key]['name']}</b> you may also like{" "}
+          </div>
+          <div>
+            <hr />
+            {renderDataMovie(data[key]['rec'])}
           </div>
         </div>
       );
@@ -140,6 +164,21 @@ export default function ModalPastRecs(props) {
     }
     return rows;
   };
+  
+  const renderDataMovie = (data) => {
+    const rows = [];
+    for (let key in data) {
+      rows.push(
+        <Button
+          variant="light"
+          key={key}
+        >
+          {key}
+        </Button>
+      );
+    }
+    return rows;
+  };
 
   return (
     <>
@@ -181,6 +220,10 @@ export default function ModalPastRecs(props) {
               <div>
                 <h3>Songs</h3>
                 {renderPastRecsSong()}
+              </div>
+              <div>
+                <h3>Movies</h3>
+                {renderPastRecsMovie()}
               </div>
             </div>
           )}

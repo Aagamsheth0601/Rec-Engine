@@ -6,6 +6,8 @@ import Login from "../login";
 import Logout from "../logout";
 import { useEffect, useState } from "react";
 import { gapi } from "gapi-script";
+import Logo from '../../Logo1.png';
+
 
 const client_id =
   "808665823142-af24qudscmqice38qgpda2mde8qplo20.apps.googleusercontent.com";
@@ -27,7 +29,7 @@ const Navbar1 = (props) => {
   return (
     <Navbar bg="light" expand="lg">
       <Container>
-        <Navbar.Brand href="/">Rec-Engine</Navbar.Brand>
+      <Navbar.Brand href="/"><img src={Logo} style={{height: '70px', width: '250px'}}></img></Navbar.Brand>
         <Navbar.Toggle aria-controls="basic-navbar-nav" />
         <Navbar.Collapse id="basic-navbar-nav">
           <Nav className="me-auto">
